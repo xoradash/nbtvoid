@@ -156,6 +156,10 @@ public class Config {
     public boolean getIsEnabled() {
         return isEnabled;
     }
+    
+    public boolean getDoDynamicUpdate() {
+        return doDynamicUpdate;
+    }
 
     public List<String> getIgnoreNbt() {
         return ignoreNbt;
@@ -175,7 +179,7 @@ public class Config {
 
     public void setMaxStoredItemRows(int maxStoredItemRows) {
         this.maxStoredItemRows = maxStoredItemRows;
-        NbtVoid.VOID.setMaxSize(maxStoredItemRows * 9);
+        VoidController.UPDATE_MAX_STORED_ITEMS_RUNNABLE.run();
     }
 
     public void setSortType(SortType sortType) {

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.gradlew.bat clean build)",
+      "Bash(./gradlew:*)",
+      "Bash(gradle clean:*)",
+      "Bash(chmod:*)",
+      "Bash(curl:*)",
+      "WebSearch",
+      "WebFetch(domain:modrinth.com)",
+      "WebFetch(domain:maven.isxander.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:maven.fabricmc.net)",
+      "Bash(.gradlew.bat build)",
+      "Bash(gradle build)",
+      "Bash(find:*)",
+      "Bash(.gradlew build)",
+      "Bash(gradlew.bat build:*)",
+      "Bash(rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

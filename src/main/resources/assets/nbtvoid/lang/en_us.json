@@ -39,5 +39,6 @@
     "config.nbtvoid.sorttypealphabetic": "Alphabetic",
     "config.nbtvoid.sorttypestoredate": "Store Date ↑",
     "config.nbtvoid.sorttypestoredateinverse": "Store Date ↓",
-    "category.nbtvoid.void": "NBT Void"
+    "category.nbtvoid.void": "NBT Void",
+    "gui.nbtvoid.clientchest.title": "Client Chest"
 }

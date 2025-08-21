@@ -18,6 +18,7 @@ import me.white.nbtvoid.Config;
 import me.white.nbtvoid.Config.CheckType;
 import me.white.nbtvoid.Config.SortType;
 import me.white.nbtvoid.NbtVoid;
+import me.white.nbtvoid.VoidController;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
@@ -169,25 +170,25 @@ public class ModMenu implements ModMenuApi {
     private static ButtonOption clearVoidButton = ButtonOption.createBuilder()
             .name(Text.translatable("config.nbtvoid.clearvoid"))
             .description(OptionDescription.of(Text.translatable("config.nbtvoid.clearvoiddescription")))
-            .action((screen, opt) -> NbtVoid.VOID.clear())
+            .action((screen, opt) -> VoidController.clear())
             .build();
 
     private static ButtonOption loadVoidButton = ButtonOption.createBuilder()
             .name(Text.translatable("config.nbtvoid.loadvoid"))
             .description(OptionDescription.of(Text.translatable("config.nbtvoid.loadvoiddescription")))
-            .action((screen, opt) -> NbtVoid.load())
+            .action((screen, opt) -> VoidController.load())
             .build();
 
     private static ButtonOption saveVoidButton = ButtonOption.createBuilder()
             .name(Text.translatable("config.nbtvoid.savevoid"))
             .description(OptionDescription.of(Text.translatable("config.nbtvoid.savevoiddescription")))
-            .action((screen, opt) -> NbtVoid.save())
+            .action((screen, opt) -> VoidController.save())
             .build();
 
     private static ButtonOption updateExceptionsButton = ButtonOption.createBuilder()
             .name(Text.translatable("config.nbtvoid.update"))
             .description(OptionDescription.of(Text.translatable("config.nbtvoid.updatedescription")))
-            .action((screen, opt) -> NbtVoid.update())
+            .action((screen, opt) -> VoidController.UPDATE_RUNNABLE.run())
             .build();
 
     public static Screen getConfigScreen(Screen parent) {
@@ -227,8 +228,6 @@ public class ModMenu implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-//        if (FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) return ModMenu::getConfigScreen;
-//        return parent -> null;
         return ModMenu::getConfigScreen;
     }
 }

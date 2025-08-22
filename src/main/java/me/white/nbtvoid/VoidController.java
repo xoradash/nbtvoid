@@ -46,6 +46,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 import me.white.nbtvoid.NbtVoid;
 
 public class VoidController {
@@ -229,7 +233,7 @@ public class VoidController {
     
     // Хелпер методы для работы с NBT в контексте компонентов
     private static NbtCompound getItemNbt(ItemStack stack) {
-        // Извлекаем NBT из CUSTOM_DATA компонента
+        // Извлекаем NBT из CUSTOM_DATA компонента (не трогаем другие компоненты вроде CUSTOM_NAME)
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             NbtComponent customData = stack.get(DataComponentTypes.CUSTOM_DATA);
             return customData != null ? customData.getNbt() : new NbtCompound();
@@ -244,6 +248,7 @@ public class VoidController {
         try {
             SETTING_NBT.set(true);
             // Устанавливаем NBT через CUSTOM_DATA компонент
+            // НЕ трогаем другие компоненты (CUSTOM_NAME, LORE, ENCHANTMENTS и т.д.)
             if (!nbt.isEmpty()) {
                 stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
             } else {
@@ -316,6 +321,7 @@ public class VoidController {
         }
         return newNbt;
     }
+    
 
     public static List<ItemStack> itemsFromText(Text text) {
         List<ItemStack> items = new ArrayList<>();

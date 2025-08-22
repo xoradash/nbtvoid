@@ -16,7 +16,9 @@
       "Bash(find:*)",
       "Bash(.gradlew build)",
       "Bash(gradlew.bat build:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(cmd /c:*)",
+      "WebFetch(domain:wiki.fabricmc.net)"
     ],
     "deny": [],
     "ask": []

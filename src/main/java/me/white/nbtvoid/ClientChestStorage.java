@@ -22,6 +22,7 @@ public class ClientChestStorage {
     private static final int TOTAL_SLOTS = SLOTS_PER_PAGE * MAX_PAGES;
     
     private static SimpleInventory inventory = new SimpleInventory(TOTAL_SLOTS);
+    private static boolean slotsLocked = false;
     
     public static Inventory getInventory() {
         return inventory;
@@ -35,31 +36,36 @@ public class ClientChestStorage {
         
         try {
             NbtCompound fileNbt = NbtIo.read(STORAGE_PATH);
-            if (fileNbt != null && fileNbt.contains("Items")) {
-                NbtList itemsList = fileNbt.getList("Items").orElse(new NbtList());
+            if (fileNbt != null) {
+                // Load slot lock state
+                slotsLocked = fileNbt.getBoolean("SlotsLocked").orElse(false);
                 
-                // Clear existing inventory
-                inventory.clear();
-                
-                for (int i = 0; i < itemsList.size() && i < TOTAL_SLOTS; i++) {
-                    NbtElement element = itemsList.get(i);
-                    if (element instanceof NbtCompound) {
-                        NbtCompound itemNbt = (NbtCompound) element;
-                        int slot = itemNbt.getInt("Slot").orElse(-1);
-                        
-                        if (slot >= 0 && slot < TOTAL_SLOTS) {
-                            // Для 1.20.4 используем CODEC для десериализации как в VoidController
-                            NbtCompound stackNbt = itemNbt.getCompound("Item").orElse(new NbtCompound());
-                            ItemStack stack = ItemStack.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, stackNbt)
-                                .result().orElse(ItemStack.EMPTY);
-                            if (!stack.isEmpty()) {
-                                inventory.setStack(slot, stack);
+                if (fileNbt.contains("Items")) {
+                    NbtList itemsList = fileNbt.getList("Items").orElse(new NbtList());
+                    
+                    // Clear existing inventory
+                    inventory.clear();
+                    
+                    for (int i = 0; i < itemsList.size() && i < TOTAL_SLOTS; i++) {
+                        NbtElement element = itemsList.get(i);
+                        if (element instanceof NbtCompound) {
+                            NbtCompound itemNbt = (NbtCompound) element;
+                            int slot = itemNbt.getInt("Slot").orElse(-1);
+                            
+                            if (slot >= 0 && slot < TOTAL_SLOTS) {
+                                // Для 1.20.4 используем CODEC для десериализации как в VoidController
+                                NbtCompound stackNbt = itemNbt.getCompound("Item").orElse(new NbtCompound());
+                                ItemStack stack = ItemStack.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, stackNbt)
+                                    .result().orElse(ItemStack.EMPTY);
+                                if (!stack.isEmpty()) {
+                                    inventory.setStack(slot, stack);
+                                }
                             }
                         }
                     }
+                    
+                    NbtVoid.LOGGER.info("Loaded client chest with {} items", itemsList.size());
                 }
-                
-                NbtVoid.LOGGER.info("Loaded client chest with {} items", itemsList.size());
             }
         } catch (Exception e) {
             NbtVoid.LOGGER.error("Failed to load client chest: ", e);
@@ -69,6 +75,10 @@ public class ClientChestStorage {
     public static void save() {
         try {
             NbtCompound fileNbt = new NbtCompound();
+            
+            // Save slot lock state
+            fileNbt.putBoolean("SlotsLocked", slotsLocked);
+            
             NbtList itemsList = new NbtList();
             
             for (int i = 0; i < TOTAL_SLOTS; i++) {
@@ -175,4 +185,14 @@ public class ClientChestStorage {
         }
         return ItemStack.EMPTY;
     }
+    
+    public static boolean getSlotsLocked() {
+        return slotsLocked;
+    }
+    
+    public static void setSlotsLocked(boolean locked) {
+        slotsLocked = locked;
+        save(); // Auto-save when lock state changes
+    }
+    
 }

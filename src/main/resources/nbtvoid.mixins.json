@@ -8,6 +8,7 @@
   },
   "client": [
     "ClientConnectionMixin",
+    "CreativeInventoryActionMixin",
     "CreativeInventoryScreenMixin",
     "HandledScreenMixin",
     "ItemStackMixin"
